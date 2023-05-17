@@ -8,46 +8,47 @@ function App() {
     {id: 2, name: 'Clean Bathroom', highPriority: false},
     {id: 3, name: 'Car MOT', highPriority: true}
   ])
-
+ 
+  // Use state ---------------------------------------------
   const [newTodo, setNewTodo] = useState("")
-  // const [newState, ]
-  const newTodoPriority = "false"
-  // Need a use state for dropdown/radio button - try and work out how
+  const [newPriority, setNewPriority] = useState('')
 
-  const completeTodo = (todoId) => {
-    const newTodos = todos.filter((todo) => {return todo.id !== todoId})
-    setTodos(newTodos)
+
+  // Handle Input Functions ----------------------------------------------
+  const handleDropdownInput = (event) => {
+    setNewPriority(event.target.value)
   }
-
-  const todoItems = todos.map((todo) => {
-    return (
-      <li class={todo.highPriority ? "high-priority" : "low-priority"} key={todo.id}>
-        {todo.name}
-        <button className='complete-button' onClick={() => completeTodo(todo.id)}>Mark Done</button>
-      </li>
-    )
-  })
 
   const handleTodoInput = (event) => {
     setNewTodo(event.target.value)
   }
 
-  // not currently enough to set priority
-  const handleDropdownInput = (event) => {
-    const newTodoPriority = event.target.value
-    return newTodoPriority
+  // Other Functions --------------------------------------------------------------
+  const completeTodo = (todoId) => {
+    const newTodos = todos.filter((todo) => {return todo.id !== todoId})
+    setTodos(newTodos)
   }
 
   const saveNewTodo = (event) => {
     event.preventDefault()
 
-    const newTodoObj = {id: Date.now(), name: newTodo, highPriority: newTodoPriority} // use the above notes to add this
+    const newTodoObj = {id: Date.now(), name: newTodo, highPriority: newPriority}
     const nextTodo = [...todos, newTodoObj]
     setTodos(nextTodo)
 
     setNewTodo('')
   }
 
+const todoItems = todos.map((todo) => {
+  return (
+    <li className={todo.highPriority ? "high-priority" : "low-priority"} key={todo.id}>
+      {todo.name}
+      <button className='complete-button' onClick={() => completeTodo(todo.id)}>Mark Done</button>
+    </li>
+  )
+})
+
+  // Return JSX
   return (
     <div className="App">
       <h2>ToDo List</h2>
@@ -56,8 +57,9 @@ function App() {
         <input id='new-todo' type='text' placeholder='New ToDo...' value={newTodo} onChange={handleTodoInput}></input>
         <label id='priority' htmlFor='priority-level'>Mark Priority: </label>
         <select onChange={handleDropdownInput}>
-          <option value='true'>High</option>
-          <option value='false'>Low</option>
+          <option value='true'>Low</option>
+          <option value='false'>High</option>
+          {/* ASK FOR HELP HERE - true/false doesn't seem to correspond */}
         </select>
         <input type='submit' value='Save'></input>
       </form>
