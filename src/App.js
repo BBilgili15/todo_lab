@@ -4,23 +4,28 @@ import {useState} from 'react'
 function App() {
 
   const [todos, setTodos] = useState([
-    {id: 1, name: 'Buy Shopping', highPriority: true},
-    {id: 2, name: 'Clean Bathroom', highPriority: false},
-    {id: 3, name: 'Car MOT', highPriority: true}
+    // {id: 1, name: 'Buy Shopping', highPriority: true},
+    // {id: 2, name: 'Clean Bathroom', highPriority: false},
+    // {id: 3, name: 'Car MOT', highPriority: true}
   ])
  
   // Use state ---------------------------------------------
-  const [newTodo, setNewTodo] = useState("")
-  const [newPriority, setNewPriority] = useState('')
+  const [newTodoName, setNewTodo] = useState("")
+  const [newPriority, setNewPriority] = useState('false')
 
 
   // Handle Input Functions ----------------------------------------------
   const handleDropdownInput = (event) => {
-    setNewPriority(event.target.value)
+    console.log(event.target.value)
+    let newPriority = false
+    if (event.target.value == 'true') {
+      newPriority = true
+    }
+    setNewPriority(newPriority) // update the state of the new todo priority to what is being passed
   }
 
   const handleTodoInput = (event) => {
-    setNewTodo(event.target.value)
+    setNewTodo(event.target.value) // update the state of the new todo name to what is being passed
   }
 
   // Other Functions --------------------------------------------------------------
@@ -32,9 +37,9 @@ function App() {
   const saveNewTodo = (event) => {
     event.preventDefault()
 
-    const newTodoObj = {id: Date.now(), name: newTodo, highPriority: newPriority}
+    const newTodoObj = {id: Date.now(), name: newTodoName, highPriority: newPriority}
     const nextTodo = [...todos, newTodoObj]
-    setTodos(nextTodo)
+    setTodos(nextTodo) // update the state of all todos to what we're passing
 
     setNewTodo('')
   }
@@ -54,12 +59,11 @@ const todoItems = todos.map((todo) => {
       <h2>ToDo List</h2>
       <form onSubmit={saveNewTodo}>
         <label htmlFor='new-todo'>Add New ToDo: </label>
-        <input id='new-todo' type='text' placeholder='New ToDo...' value={newTodo} onChange={handleTodoInput}></input>
+        <input id='new-todo' type='text' placeholder='New ToDo...' value={newTodoName} onChange={handleTodoInput}></input>
         <label id='priority' htmlFor='priority-level'>Mark Priority: </label>
         <select onChange={handleDropdownInput}>
-          <option value='true'>Low</option>
-          <option value='false'>High</option>
-          {/* ASK FOR HELP HERE - true/false doesn't seem to correspond */}
+          <option value='true'>High</option>
+          <option value='false'>Low</option>
         </select>
         <input type='submit' value='Save'></input>
       </form>
